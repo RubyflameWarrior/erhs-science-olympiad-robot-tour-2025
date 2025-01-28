@@ -18,10 +18,11 @@ def turn(direction, sets):
     else:
         Maqueen_V5.motor_run(Maqueen_V5.Motors.M1, Maqueen_V5.Dir.CW, 50)
         Maqueen_V5.motor_run(Maqueen_V5.Motors.M2, Maqueen_V5.Dir.CCW, 50)
-    pause(261 * sets)
+    pause(300 * sets)
     Maqueen_V5.motor_stop(Maqueen_V5.Motors.ALL)
 
 def drivePID():
+    basic.show_icon(IconNames.ANGRY)
     # (25 cm half tile length - 4.125 half bot length) rounded to integer = 21 cm
     targetpoint = 21
     
@@ -37,6 +38,8 @@ def drivePID():
 
     while abs(error) > 0 and sameErrorCount < 10:
         error = targetpoint - Maqueen_V5.ultrasonic()
+        # serial.write_value("Error", error)
+        serial.write_value("Sensor", Maqueen_V5.ultrasonic())
         if error == previousError:
             sameErrorCount += 1
         derivative = error - previousError
@@ -59,14 +62,21 @@ def drivePID():
 
         pause(10)
 
-# One time run main code
-basic.show_icon(IconNames.HAPPY)
-serial.redirect_to_usb()
-drive(2)
+def on_button_pressed_a():
+    drivePID()
+input.on_button_pressed(Button.A, on_button_pressed_a)
+
+def on_button_pressed_b():
+    turn("l", 1)
+input.on_button_pressed(Button.B, on_button_pressed_b)
 
 # Background main code
-def onEvery_interval():
-    serial.write_value("Sensor", Maqueen_V5.ultrasonic())
-    # serial.write_value("Roll", input.rotation(Rotation.ROLL))
-    # serial.write_value("Compass", input.compass_heading())
-loops.every_interval(500, onEvery_interval)
+# def onEvery_interval():
+#     serial.write_value("Sensor", Maqueen_V5.ultrasonic())
+#     # serial.write_value("Roll", input.rotation(Rotation.ROLL))
+#     # serial.write_value("Compass", input.compass_heading())
+# loops.every_interval(500, onEvery_interval)
+
+# MAIN CODE
+serial.redirect_to_usb() # Ignore this
+# drive(2)

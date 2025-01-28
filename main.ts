@@ -12,7 +12,7 @@ function driveBack(sets: number) {
     Maqueen_V5.motorStop(Maqueen_V5.Motors.All)
 }
 
-function turn(direction: any, sets: number) {
+function turn(direction: string, sets: number) {
     if (direction == "left" || direction == "l") {
         Maqueen_V5.motorRun(Maqueen_V5.Motors.M1, Maqueen_V5.Dir.CCW, 50)
         Maqueen_V5.motorRun(Maqueen_V5.Motors.M2, Maqueen_V5.Dir.CW, 50)
@@ -21,11 +21,12 @@ function turn(direction: any, sets: number) {
         Maqueen_V5.motorRun(Maqueen_V5.Motors.M2, Maqueen_V5.Dir.CCW, 50)
     }
     
-    pause(261 * sets)
+    pause(300 * sets)
     Maqueen_V5.motorStop(Maqueen_V5.Motors.All)
 }
 
 function drivePID() {
+    basic.showIcon(IconNames.Angry)
     //  (25 cm half tile length - 4.125 half bot length) rounded to integer = 21 cm
     let targetpoint = 21
     let error = targetpoint - Maqueen_V5.Ultrasonic()
@@ -37,6 +38,8 @@ function drivePID() {
     let kD = 0
     while (Math.abs(error) > 0 && sameErrorCount < 10) {
         error = targetpoint - Maqueen_V5.Ultrasonic()
+        //  serial.write_value("Error", error)
+        serial.writeValue("Sensor", Maqueen_V5.Ultrasonic())
         if (error == previousError) {
             sameErrorCount += 1
         }
@@ -64,13 +67,17 @@ function drivePID() {
     }
 }
 
-//  One time run main code
-basic.showIcon(IconNames.Happy)
-serial.redirectToUSB()
-drive(2)
-//  Background main code
-//  serial.write_value("Roll", input.rotation(Rotation.ROLL))
-//  serial.write_value("Compass", input.compass_heading())
-loops.everyInterval(500, function onEvery_interval() {
-    serial.writeValue("Sensor", Maqueen_V5.Ultrasonic())
+input.onButtonPressed(Button.A, function on_button_pressed_a() {
+    drivePID()
 })
+input.onButtonPressed(Button.B, function on_button_pressed_b() {
+    turn("l", 1)
+})
+//  Background main code
+//  def onEvery_interval():
+//      serial.write_value("Sensor", Maqueen_V5.ultrasonic())
+//      # serial.write_value("Roll", input.rotation(Rotation.ROLL))
+//      # serial.write_value("Compass", input.compass_heading())
+//  loops.every_interval(500, onEvery_interval)
+//  MAIN CODE
+serial.redirectToUSB()
