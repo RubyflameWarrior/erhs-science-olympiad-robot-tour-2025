@@ -1,49 +1,29 @@
 basic.show_icon(IconNames.HAPPY)
-serial.redirect_to_usb()
+# serial.redirect_to_usb()
 # basic.show_number(25 - maqueen.ultrasonic(PingUnit.CENTIMETERS))
 
 def drive(sets):
-    # maqueen.motor_run(maqueen.Motors.ALL, maqueen.Dir.CW, 50)
     Maqueen_V5.motor_run(Maqueen_V5.Motors.ALL, Maqueen_V5.Dir.CW, 100)
     pause(100 * sets)
-    # maqueen.motor_stop(maqueen.Motors.ALL)
     Maqueen_V5.motor_stop(Maqueen_V5.Motors.ALL)
+    serial.write_number(1)
 
 def driveBack(sets):
-    maqueen.motor_run(maqueen.Motors.ALL, maqueen.Dir.CCW, 50)
+    Maqueen_V5.motor_run(Maqueen_V5.Motors.ALL, Maqueen_V5.Dir.CCW, 50)
     pause(100 * sets)
-    maqueen.motor_stop(maqueen.Motors.ALL)
+    Maqueen_V5.motor_stop(Maqueen_V5.Motors.ALL)
 
 def turn(direction, sets):
     if direction == "left":
-        maqueen.motor_run(maqueen.Motors.M1, maqueen.Dir.CCW, 50)
-        maqueen.motor_run(maqueen.Motors.M2, maqueen.Dir.CW, 50)
+        Maqueen_V5.motor_run(Maqueen_V5.Motors.M1, Maqueen_V5.Dir.CCW, 50)
+        Maqueen_V5.motor_run(Maqueen_V5.Motors.M2, Maqueen_V5.Dir.CW, 50)
     else:
-        maqueen.motor_run(maqueen.Motors.M1, maqueen.Dir.CW, 50)
-        maqueen.motor_run(maqueen.Motors.M2, maqueen.Dir.CCW, 50)
+        Maqueen_V5.motor_run(Maqueen_V5.Motors.M1, Maqueen_V5.Dir.CW, 50)
+        Maqueen_V5.motor_run(Maqueen_V5.Motors.M2, Maqueen_V5.Dir.CCW, 50)
     pause(261 * sets)
-    maqueen.motor_stop(maqueen.Motors.ALL)
+    Maqueen_V5.motor_stop(Maqueen_V5.Motors.ALL)
 
 drive(2)
-
-"""
-drive(0.5)
-pause(50)
-turn("right", 1)
-pause(50)
-drive(2)
-pause(50)
-turn("left", 1)
-pause(50)
-drive(3)
-pause(50)
-driveBack(1)
-pause(50)
-turn("right", 1)
-pause(50)
-drive(1)
-# turn("right", 4)
-"""
 
 """
 PIDMode = 1
@@ -70,11 +50,11 @@ def on_every_interval():
         power = (error * kP)
         # basic.show_number(error)
         if error > 0:
-            maqueen.motor_run(maqueen.Motors.M1, maqueen.Dir.CCW, abs(power))
-            maqueen.motor_run(maqueen.Motors.M2, maqueen.Dir.CCW, abs(power))
+            Maqueen_V5.motor_run(Maqueen_V5.Motors.M1, Maqueen_V5.Dir.CCW, abs(power))
+            Maqueen_V5.motor_run(Maqueen_V5.Motors.M2, Maqueen_V5.Dir.CCW, abs(power))
         elif error < 0:
-            maqueen.motor_run(maqueen.Motors.M1, maqueen.Dir.CW, abs(power))
-            maqueen.motor_run(maqueen.Motors.M2, maqueen.Dir.CW, abs(power))
+            Maqueen_V5.motor_run(Maqueen_V5.Motors.M1, Maqueen_V5.Dir.CW, abs(power))
+            Maqueen_V5.motor_run(Maqueen_V5.Motors.M2, Maqueen_V5.Dir.CW, abs(power))
 loops.every_interval(10, on_every_interval)
 
 def basicDrive(target):
@@ -89,16 +69,13 @@ def basicDrive(target):
 def on_forever():
 serial.write_value("Pitch", input.acceleration(Dimension.X))
 basic.forever(on_forever)
-COMMENT WAS HERE
 
 
 def on_every_interval():
     # serial.write_value("Pitch", input.acceleration(Dimension.X))
     serial.write_value("Compass", input.rotation(Rotation.ROLL))
 loops.every_interval(10, on_every_interval)
-
 """
-
 
 def on_every_interval():
     print(input.compass_heading())
