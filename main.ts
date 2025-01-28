@@ -2,13 +2,13 @@
 //  Function definitions
 function drive(sets: number) {
     Maqueen_V5.motorRun(Maqueen_V5.Motors.All, Maqueen_V5.Dir.CW, 100)
-    pause(100 * sets)
+    pause(850 * sets)
     Maqueen_V5.motorStop(Maqueen_V5.Motors.All)
 }
 
 function driveBack(sets: number) {
-    Maqueen_V5.motorRun(Maqueen_V5.Motors.All, Maqueen_V5.Dir.CCW, 50)
-    pause(100 * sets)
+    Maqueen_V5.motorRun(Maqueen_V5.Motors.All, Maqueen_V5.Dir.CCW, 100)
+    pause(850 * sets)
     Maqueen_V5.motorStop(Maqueen_V5.Motors.All)
 }
 
@@ -21,12 +21,11 @@ function turn(direction: string, sets: number) {
         Maqueen_V5.motorRun(Maqueen_V5.Motors.M2, Maqueen_V5.Dir.CCW, 50)
     }
     
-    pause(300 * sets)
+    pause(600 * sets)
     Maqueen_V5.motorStop(Maqueen_V5.Motors.All)
 }
 
 function drivePID() {
-    basic.showIcon(IconNames.Angry)
     //  (25 cm half tile length - 4.125 half bot length) rounded to integer = 21 cm
     let targetpoint = 21
     let error = targetpoint - Maqueen_V5.Ultrasonic()
@@ -80,4 +79,6 @@ input.onButtonPressed(Button.B, function on_button_pressed_b() {
 //      # serial.write_value("Compass", input.compass_heading())
 //  loops.every_interval(500, onEvery_interval)
 //  MAIN CODE
+basic.showIcon(IconNames.Happy)
+drive(2)
 serial.redirectToUSB()

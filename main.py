@@ -3,12 +3,12 @@
 # Function definitions
 def drive(sets):
     Maqueen_V5.motor_run(Maqueen_V5.Motors.ALL, Maqueen_V5.Dir.CW, 100)
-    pause(100 * sets)
+    pause(850 * sets)
     Maqueen_V5.motor_stop(Maqueen_V5.Motors.ALL)
 
 def driveBack(sets):
-    Maqueen_V5.motor_run(Maqueen_V5.Motors.ALL, Maqueen_V5.Dir.CCW, 50)
-    pause(100 * sets)
+    Maqueen_V5.motor_run(Maqueen_V5.Motors.ALL, Maqueen_V5.Dir.CCW, 100)
+    pause(850 * sets)
     Maqueen_V5.motor_stop(Maqueen_V5.Motors.ALL)
 
 def turn(direction, sets):
@@ -18,11 +18,10 @@ def turn(direction, sets):
     else:
         Maqueen_V5.motor_run(Maqueen_V5.Motors.M1, Maqueen_V5.Dir.CW, 50)
         Maqueen_V5.motor_run(Maqueen_V5.Motors.M2, Maqueen_V5.Dir.CCW, 50)
-    pause(300 * sets)
+    pause(600 * sets)
     Maqueen_V5.motor_stop(Maqueen_V5.Motors.ALL)
 
 def drivePID():
-    basic.show_icon(IconNames.ANGRY)
     # (25 cm half tile length - 4.125 half bot length) rounded to integer = 21 cm
     targetpoint = 21
     
@@ -78,5 +77,8 @@ input.on_button_pressed(Button.B, on_button_pressed_b)
 # loops.every_interval(500, onEvery_interval)
 
 # MAIN CODE
+basic.show_icon(IconNames.HAPPY)
+drive(2)
+
 serial.redirect_to_usb() # Ignore this
 # drive(2)
